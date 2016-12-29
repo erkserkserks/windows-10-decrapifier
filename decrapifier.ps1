@@ -1,22 +1,4 @@
 write-Host "*******Decrapifying Windows 10...*******"
-write-Host "***Removing App Packages...***"
-
-#I recommend running this script on a fresh install, though it should work fine anyways.  Should ;)
-#This part removes all the apps.  By default, it removes every except the calculator and the store.  To remove all apps, comment out this part...
-
-
-Get-AppxPackage -AllUsers | where-object {$_.name -notlike "*Microsoft.WindowsStore*"} | where-object {$_.name -notlike "*Microsoft.WindowsCalculator*"} | Remove-AppxPackage 
-
-Get-AppxProvisionedPackage -online | where-object {$_.packagename -notlike "*Microsoft.WindowsStore*"} | where-object {$_.packagename -notlike "*Microsoft.WindowsCalculator*"} | Remove-AppxProvisionedPackage -online
-
-#... and comment in this one:
-
-#Get-AppxPackage -allusers | Remove-AppxPackage
-
-#Get-AppXProvisionedPackage -online | Remove-AppxProvisionedPackage -online
-
-
-# Now apps are removed, below we will disable a bunch of features.  By no means a catch-all, more of a catch-most :)
 
 write-Host "***Disabling delivery optimization...***"
 
@@ -26,11 +8,10 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization" /t
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" /v "DODownloadMode" /t REG_DWORD /d 0 /f
 
 # Next Section is for Anniversary Edition Only, comment it in if you are on 1607+, no effect it seems on previous editions
-
-#Write-Host "***Disabling Suggested Apps, Feedback, Lockscreen Spotlight***"
-#reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /t REG_DWORD /v SystemPaneSuggestionsEnabled /d 0 /f
-#reg add "HKCU\Software\Microsoft\CurrentVersion\ContentDeliveryManager\SoftLandingEnabled" /t REG_DWORD /v SoftLandingEnabled /d 0 /f
-#reg add "HKCU\Software\Microsoft\CurrentVersion\ContentDeliveryManager\" /t REG_DWORD /v RotatingLockScreenEnable /d 0 /f
+Write-Host "***Disabling Suggested Apps, Feedback, Lockscreen Spotlight***"
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /t REG_DWORD /v SystemPaneSuggestionsEnabled /d 0 /f
+reg add "HKCU\Software\Microsoft\CurrentVersion\ContentDeliveryManager\SoftLandingEnabled" /t REG_DWORD /v SoftLandingEnabled /d 0 /f
+reg add "HKCU\Software\Microsoft\CurrentVersion\ContentDeliveryManager\" /t REG_DWORD /v RotatingLockScreenEnable /d 0 /f
 
 write-Host "***Disabling OneDrive...***"
 
